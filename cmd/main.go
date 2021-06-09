@@ -14,7 +14,7 @@ import (
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/proxy-jira/healthy", handleValidateHealthy).Methods("GET")
-	router.HandleFunc("/proxy-jira/webhook", handleWebhook).Methods("GET")
+	router.HandleFunc("/proxy-jira/webhook", handleWebhook).Methods("POST")
 
 	log.Println("Port: ", os.Getenv("APP_PORT"))
 
