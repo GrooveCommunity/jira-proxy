@@ -26,7 +26,7 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
 
-	log.Println(params)
+	log.Println("request")
+	log.Println(r)
 }
