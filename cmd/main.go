@@ -32,11 +32,6 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
-
-	var target interface{}
-
 	body, _ := ioutil.ReadAll(r.Body)
-	json.Unmarshal(body, &target)
-
-	log.Println(target)
+	log.Println(string(body))
 }
