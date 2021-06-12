@@ -26,7 +26,7 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
 
-	log.Println("request")
-	log.Println(r)
+	log.Println(decoder)
 }
