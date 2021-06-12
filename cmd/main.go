@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 
@@ -10,6 +11,11 @@ import (
 	"github.com/GrooveCommunity/proxy-jira/entity"
 	"github.com/gorilla/mux"
 )
+
+type JiraStructure struct {
+	ID        int
+	Timestamp string
+}
 
 func main() {
 	router := mux.NewRouter()
@@ -26,7 +32,11 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
 
-	log.Println(decoder)
+	var target interface{}
+
+	body, _ := io.ReadAll(r.Body)
+	json.Unmarshal(body, &target)
+
+	log.Println(target)
 }
