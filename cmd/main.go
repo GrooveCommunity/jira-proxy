@@ -5,17 +5,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-
 	"os"
 
 	"github.com/GrooveCommunity/proxy-jira/entity"
+	"github.com/GrooveCommunity/proxy-jira/internal"
 	"github.com/gorilla/mux"
 )
-
-type JiraStructure struct {
-	ID        int
-	Timestamp string
-}
 
 func main() {
 	router := mux.NewRouter()
@@ -32,6 +27,12 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
+
+	var jiraRequest entity.JiraRequest
+
 	body, _ := ioutil.ReadAll(r.Body)
-	log.Println(string(body))
+
+	json.Unmarshal(body, &jiraRequest)
+
+	go internal.ForwardDispatcher(os.Getenv("GCP_PROJECT_ID"), jiraRequest)
 }
