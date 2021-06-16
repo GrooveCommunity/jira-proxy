@@ -34,5 +34,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &jiraRequest)
 
+	log.Println("Enviando para a fila do dispatcher")
+
 	go internal.ForwardDispatcher(os.Getenv("GCP_PROJECT_ID"), jiraRequest)
 }
