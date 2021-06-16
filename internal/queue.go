@@ -16,7 +16,7 @@ import (
 )
 
 func ForwardDispatcher(projectID string, jiraRequest entity.JiraRequest) {
-	publicMessage(projectID, "projects/monitoria-groovetech/topics/dispatcher", jiraRequest)
+	publicMessage(projectID, "dispatcher", jiraRequest)
 }
 
 func publicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) {
