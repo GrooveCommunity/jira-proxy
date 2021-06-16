@@ -23,7 +23,6 @@ func main() {
 }
 
 func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
-	log.Println("Acionando healthy")
 	json.NewEncoder(w).Encode(entity.Healthy{Status: "Success!"})
 }
 
@@ -34,8 +33,6 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 
 	json.Unmarshal(body, &jiraRequest)
-
-	log.Println("Enviando para a fila do dispatcher")
 
 	go internal.ForwardDispatcher("monitoria-groovetech", jiraRequest)
 }

@@ -5,14 +5,10 @@ import (
 
 	"log"
 
-	//	"encoding/json"
-
-	//	"sync"
-	//	"sync/atomic"
+	"encoding/json"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/GrooveCommunity/proxy-jira/entity"
-	//	"google.golang.org/api/iterator"
 )
 
 func ForwardDispatcher(projectID string, jiraRequest entity.JiraRequest) {
@@ -33,51 +29,13 @@ func publicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) 
 	topic := client.Topic(topicName)
 	defer topic.Stop()
 
-	var results []*pubsub.PublishResult
-	result := topic.Publish(ctx, &pubsub.Message{
-		Data: []byte("hello world"),
-	})
-
-	results = append(results, result)
-
-	for _, r := range results {
-		id, errResult := r.Get(ctx)
-		if errResult != nil {
-			log.Fatal(errResult)
-		}
-
-		log.Println("Published a message with a message ID: " + id)
-	}
-
-	/*topics := client.Topics(ctx)
-
-	for {
-		item, errTopics := topics.Next()
-		if err == iterator.Done {
-			break
-		}
-
-		if errTopics != nil {
-			log.Fatal(errTopics)
-		}
-
-		log.Println(item)
-
-	}
-
-	//log.Println(topics.Next())*/
-
-	/*topic := client.Topic("projects/monitoria-groovetech/topics/dispatcher")
-
 	jiraRequestJson, errJson := json.Marshal(jiraRequest)
-	log.Println(jiraRequestJson)
-
 	if errJson != nil {
 		log.Fatalln("Ocorreu um erro na conversão de json para o jiraRequest. \nError: " + err.Error())
 	}
 
 	resp := topic.Publish(ctx, &pubsub.Message{
-		Data: []byte("teste go"),
+		Data: jiraRequestJson,
 	})
 
 	msgID, errPublish := resp.Get(ctx)
@@ -85,8 +43,5 @@ func publicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) 
 		log.Fatalln("Ocorreu um erro na publicação para o topic " + topicName + ". \nError: " + err.Error())
 	}
 
-	log.Println("Mensagem " + msgID + " criada com sucesso!")*/
-
-	//topic.Publish(ctx, msg{})
-
+	log.Println("Mensagem " + msgID + " criada com sucesso!")
 }
