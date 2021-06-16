@@ -12,7 +12,7 @@ import (
 )
 
 func ForwardDispatcher(projectID string, jiraRequest entity.JiraRequest) {
-	publicMessage(projectID, "dispatcher", jiraRequest)
+	publicMessage(projectID, "dispatcher-jira-paygo", jiraRequest)
 }
 
 func publicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) {
