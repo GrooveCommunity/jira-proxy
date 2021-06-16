@@ -23,6 +23,7 @@ func main() {
 }
 
 func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
+	log.Println("Acionando healthy")
 	json.NewEncoder(w).Encode(entity.Healthy{Status: "Success!"})
 }
 
@@ -36,5 +37,5 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Enviando para a fila do dispatcher")
 
-	go internal.ForwardDispatcher(os.Getenv("GCP_PROJECT_ID"), jiraRequest)
+	go internal.ForwardDispatcher("monitoria-groovetech", jiraRequest)
 }
