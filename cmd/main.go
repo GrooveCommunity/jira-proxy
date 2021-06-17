@@ -34,5 +34,5 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &jiraRequest)
 
-	go internal.ForwardDispatcher("monitoria-groovetech", jiraRequest)
+	go internal.ForwardIssue(jiraRequest, body)
 }

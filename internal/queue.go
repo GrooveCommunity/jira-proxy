@@ -11,11 +11,7 @@ import (
 	"github.com/GrooveCommunity/proxy-jira/entity"
 )
 
-func ForwardDispatcher(projectID string, jiraRequest entity.JiraRequest) {
-	publicMessage(projectID, "dispatcher-jira-paygo", jiraRequest)
-}
-
-func publicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) {
+func PublicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) {
 	ctx := context.Background()
 
 	client, err := pubsub.NewClient(ctx, projectID)
