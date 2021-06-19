@@ -25,7 +25,7 @@ func main() {
 	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
 	//topicMetrics = os.Getenv("TOPIC_ID_METRICS")
 
-	if projectID == "" || topicDispatcher == "" || {
+	if projectID == "" || topicDispatcher == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
 	}
 
