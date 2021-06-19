@@ -5,39 +5,42 @@ import (
 
 	"log"
 
-	"encoding/json"
-
 	"cloud.google.com/go/pubsub"
 	"github.com/GrooveCommunity/proxy-jira/entity"
 )
 
-func PublicMessage(projectID, topicName string, jiraRequest entity.JiraRequest) {
+func PublicMessage(projectID, topicName string, payload []byte) {
+
+	var err error
+
 	ctx := context.Background()
 
 	client, err := pubsub.NewClient(ctx, projectID)
+	defer client.Close()
 
 	if err != nil {
-		log.Fatalln("Ocorreu um erro na comunicação com o PubSub. \nError: " + err.Error())
+		log.Fatal(entity.ResponseError{
+			Message:    "Ocorreu um erro na comunicação com o PubSub.",
+			StatusCode: 504,
+			Error:      err,
+		})
 	}
-
-	defer client.Close()
 
 	topic := client.Topic(topicName)
 	defer topic.Stop()
 
-	jiraRequestJson, errJson := json.Marshal(jiraRequest)
-	if errJson != nil {
-		log.Fatalln("Ocorreu um erro na conversão de json para o jiraRequest. \nError: " + err.Error())
-	}
-
 	resp := topic.Publish(ctx, &pubsub.Message{
-		Data: jiraRequestJson,
+		Data: payload,
 	})
 
 	msgID, errPublish := resp.Get(ctx)
 	if errPublish != nil {
-		log.Fatalln("Ocorreu um erro na publicação para o topic " + topicName + ". \nError: " + err.Error())
+		log.Fatal(entity.ResponseError{
+			Message:    "Ocorreu um erro na publicação para o topic " + topicName,
+			StatusCode: 500,
+			Error:      err,
+		})
 	}
 
-	log.Println("Mensagem " + msgID + " criada com sucesso!")
+	log.Println("Mensagem " + msgID + " no tópico " + topicName + " criada com sucesso!")
 }

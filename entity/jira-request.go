@@ -58,22 +58,24 @@ type JiraProject struct {
 }
 
 type JiraFields struct {
-	ChangeDate string `json:"statuscategorychangedate"`
-	User       string `json:"displayName"`
-	Priority   JiraPriority
-	Resolution JiraResolution
-	Assignee   JiraAssignee
-	Creator    JiraCreator
-	Reporter   JiraReporter
-	IssueType  JiraType
-	Project    JiraProject
-	Created    string
-	Updated    string
-	Summary    string
+	ChangeDate  string `json:"statuscategorychangedate"`
+	User        string `json:"displayName"`
+	Priority    JiraPriority
+	Resolution  JiraResolution
+	Assignee    JiraAssignee
+	Creator     JiraCreator
+	Reporter    JiraReporter
+	IssueType   JiraType
+	Project     JiraProject
+	Created     string
+	Updated     string
+	Summary     string
+	Status      JiraStatus
+	Description string
 }
 
 type JiraRequest struct {
-	EventType string `json:"webhookEvent"`
+	EventName string `json:"webhookEvent"`
 	User      JiraUser
 	Issue     JiraIssue
 	ChangeLog JiraChangeLog

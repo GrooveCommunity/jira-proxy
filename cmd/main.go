@@ -12,12 +12,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	projectID, topicDispatcher, topicMetrics string
+)
+
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/healthy", handleValidateHealthy).Methods("GET")
 	router.HandleFunc("/webhook", handleWebhook).Methods("POST")
 
-	log.Println("Port: ", os.Getenv("APP_PORT"))
+	projectID = os.Getenv("PROJECT_ID")
+	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
+	topicMetrics = os.Getenv("TOPIC_ID_METRICS")
+
+	if projectID == "" || topicDispatcher == "" || topicMetrics == "" {
+		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
+	}
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
@@ -34,5 +44,5 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &jiraRequest)
 
-	go internal.ForwardIssue(jiraRequest, body)
+	go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, topicMetrics)
 }

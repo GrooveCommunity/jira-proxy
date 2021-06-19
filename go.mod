@@ -10,4 +10,4 @@ require (
 	github.com/GrooveCommunity/glib-noc-event-structs v0.0.0
 )
 
-replace github.com/GrooveCommunity/glib-noc-event-structs v0.0.0 => /go/src/github.com/GrooveCommunity/glib-noc-event-structs
+replace github.com/GrooveCommunity/glib-noc-event-structs v0.0.0 => /home/eduardodicarte/go/src/github.com/GrooveCommunity/glib-noc-event-structs
