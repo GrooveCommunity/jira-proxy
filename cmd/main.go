@@ -41,6 +41,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	var jiraRequest entity.JiraRequest
 
 	body, _ := ioutil.ReadAll(r.Body)
+	log.Println(body)
 
 	json.Unmarshal(body, &jiraRequest)
 
