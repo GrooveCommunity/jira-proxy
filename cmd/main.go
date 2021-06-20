@@ -21,13 +21,13 @@ func main() {
 	router.HandleFunc("/healthy", handleValidateHealthy).Methods("GET")
 	router.HandleFunc("/webhook", handleWebhook).Methods("POST")
 
-	//projectID = os.Getenv("PROJECT_ID")
-	//topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
+	projectID = os.Getenv("PROJECT_ID")
+	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
 	//topicMetrics = os.Getenv("TOPIC_ID_METRICS")
 
-	/*if projectID == "" || topicDispatcher == "" {
+	if projectID == "" || topicDispatcher == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
-	}*/
+	}
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
