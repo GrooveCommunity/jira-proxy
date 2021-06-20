@@ -63,7 +63,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 	}
 
 	go PublicMessage(projectID, topicDispatcher, payload)
-	//go PublicMessage(projectID, topicMetrics, payload)
+	go PublicMessage(projectID, topicMetrics, payload)
 }
 
 func unmarchallMap(dataMap map[string]interface{}) []entity.JiraCustomField {

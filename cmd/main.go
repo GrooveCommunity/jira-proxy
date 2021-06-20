@@ -23,7 +23,7 @@ func main() {
 
 	projectID = os.Getenv("PROJECT_ID")
 	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
-	//topicMetrics = os.Getenv("TOPIC_ID_METRICS")
+	topicMetrics = os.Getenv("TOPIC_ID_METRICS")
 
 	if projectID == "" || topicDispatcher == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
@@ -50,5 +50,5 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	jiraRequest.Issue.Fields.CustomFields = customFields
 
-	go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, "")
+	go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, topicMetrics)
 }
