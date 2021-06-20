@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/GrooveCommunity/proxy-jira/entity"
+	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
 	"github.com/GrooveCommunity/proxy-jira/internal"
 	"github.com/gorilla/mux"
 )
@@ -21,13 +21,13 @@ func main() {
 	router.HandleFunc("/healthy", handleValidateHealthy).Methods("GET")
 	router.HandleFunc("/webhook", handleWebhook).Methods("POST")
 
-	projectID = os.Getenv("PROJECT_ID")
-	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
+	//projectID = os.Getenv("PROJECT_ID")
+	//topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
 	//topicMetrics = os.Getenv("TOPIC_ID_METRICS")
 
-	if projectID == "" || topicDispatcher == "" {
+	/*if projectID == "" || topicDispatcher == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
-	}
+	}*/
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
@@ -38,12 +38,17 @@ func handleValidateHealthy(w http.ResponseWriter, r *http.Request) {
 
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
+	var request interface{}
 	var jiraRequest entity.JiraRequest
 
 	body, _ := ioutil.ReadAll(r.Body)
-	log.Println(string(body))
 
 	json.Unmarshal(body, &jiraRequest)
+	json.Unmarshal(body, &request)
+
+	customFields := internal.UnmarchallMapCustomField(request.(map[string]interface{}))
+
+	jiraRequest.Issue.Fields.CustomFields = customFields
 
 	go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, "")
 }

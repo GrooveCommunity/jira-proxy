@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/GrooveCommunity/proxy-jira/entity"
+	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
 )
 
 func PublicMessage(projectID, topicName string, payload []byte) {
