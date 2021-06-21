@@ -65,8 +65,7 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10646" {
-			if item.Value == "Service Desk" {
-				log.Println("Encaminhando mensagem para a fila do dispatcher")
+			if item.Value == "Service Desk" || item.Name == "Service Desk" {
 				PublicMessage(projectID, topicName, payload)
 			}
 
