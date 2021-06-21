@@ -56,8 +56,23 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 		})
 	}
 
-	go PublicMessage(projectID, topicDispatcher, payload)
+	go validateIssueDispatcher(jiraRequest, projectID, topicDispatcher, payload)
+
 	go PublicMessage(projectID, topicMetrics, payload)
+}
+
+func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
+	for _, item := range jiraRequest.Issue.Fields.CustomFields {
+		//customfield_10646 é o campo Squads
+		if item.CustomID == "customfield_10646" {
+			if item.Value == "Service Desk" {
+				log.Println("Encaminhando mensagem para a fila do dispatcher")
+				PublicMessage(projectID, topicName, payload)
+			}
+
+			break
+		}
+	}
 }
 
 func UnmarchallMapCustomField(dataMap map[string]interface{}) []entity.CustomField {
