@@ -15,12 +15,6 @@ type customFields map[string]interface{}
 
 func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicDispatcher, topicMetrics string) {
 
-	var customFieldsData customFields
-
-	json.Unmarshal(body, &customFieldsData)
-
-	jiraCustomfields := unmarchallMap(customFieldsData)
-
 	jiraEvent := entity.JiraEvent{
 		EventUser: jiraRequest.User.Name,
 		DateTime:  time.Now().Format(time.RFC3339),
@@ -35,7 +29,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 	jiraIssue := entity.JiraIssue{
 		Event:        jiraEvent,
-		CustomFields: jiraCustomfields,
+		CustomFields: jiraRequest.Issue.Fields.CustomFields,
 		Transitions:  jiraTransitions,
 		Key:          jiraRequest.Issue.Key,
 		Assignee:     jiraRequest.Issue.Fields.Assignee.User,
@@ -64,22 +58,6 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 	go PublicMessage(projectID, topicDispatcher, payload)
 	go PublicMessage(projectID, topicMetrics, payload)
-}
-
-func unmarchallMap(dataMap map[string]interface{}) []entity.JiraCustomField {
-	var customFields []entity.JiraCustomField
-
-	for key, item := range dataMap {
-		if (key == "issue" || key == "fields") && reflect.TypeOf(item).Kind() == reflect.Map {
-			customFields = unmarchallMap(item.(map[string]interface{}))
-		}
-
-		if strings.HasPrefix(key, "customfield") && item != nil && reflect.TypeOf(item).Kind() == reflect.String {
-			customFields = append(customFields, entity.JiraCustomField{ID: key, Value: item.(string)})
-		}
-	}
-
-	return customFields
 }
 
 func UnmarchallMapCustomField(dataMap map[string]interface{}) []entity.CustomField {
