@@ -66,6 +66,13 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10646" {
 			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
+				SendMessageToChannel(
+					"===============================================================================================================\n" +
+						"Ticket ID: " + jiraRequest.Issue.ID + "\n " +
+						"Ticket Key:" + jiraRequest.Issue.Key + "\n " +
+						"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
+						"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n" +
+						"===============================================================================================================\n\n")
 				PublicMessage(projectID, topicName, payload)
 			}
 
@@ -100,4 +107,18 @@ func UnmarchallMapCustomField(dataMap map[string]interface{}) []entity.CustomFie
 	}
 
 	return customFields
+}
+
+func getSLA(priority string) string {
+	if priority == "Altíssima" {
+		return "00:15:00"
+	} else if priority == "Alta" {
+		return "02:00:00"
+	} else if priority == "Média" {
+		return "08:00:00"
+	} else if priority == "Baixa" {
+		return "48:00:00"
+	}
+
+	return ""
 }
