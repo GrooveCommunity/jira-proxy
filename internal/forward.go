@@ -65,9 +65,9 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 	if (jiraRequest.EventName == "jira:issue_created" || jiraRequest.EventName == "jira:issue_updated") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
 		SendMessageToChannel(
 			"===============================================================================================================\n" +
-				"Ticket ID: " + jiraRequest.Issue.ID + "\nTicket Key:" + jiraRequest.Issue.Key + "\n "
+				"Ticket ID: " + jiraRequest.Issue.ID + "\nTicket Key:" + jiraRequest.Issue.Key + "\n " +
 				"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
-				"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n"
+				"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n")
 	}
 
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
