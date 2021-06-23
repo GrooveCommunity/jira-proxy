@@ -4,10 +4,12 @@ import (
 	"log"
 	"os"
 
+	"time"
+
 	"github.com/bwmarrin/discordgo"
 )
 
-func SendMessageToChannel(message string) {
+func SendMessageToChannel(url, issueKey, message string) {
 	token := os.Getenv("TOKEN_DISPATCHER_PAYGO_DISCORD")
 	channelID := os.Getenv("CHANNEL_ID_DISCORD")
 
@@ -19,7 +21,16 @@ func SendMessageToChannel(message string) {
 
 	dg.Identify.Intents = discordgo.IntentsGuildMessages
 
-	_, errMsg := dg.ChannelMessageSend(channelID, message)
+	msg := discordgo.MessageEmbed{
+		Type:        discordgo.EmbedTypeRich,
+		Title:       issueKey,
+		URL:         url,
+		Description: message,
+		Timestamp:   time.Now().Format(time.RFC822),
+		Color:       5793266,
+	}
+
+	_, errMsg := dg.ChannelMessageSendEmbed(channelID, &msg)
 
 	if errMsg != nil {
 		panic(errMsg)

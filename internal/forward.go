@@ -69,7 +69,10 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 		if item.CustomID == "customfield_10366" {
 
 			if jiraRequest.EventName == "jira:issue_updated" && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" && (item.Value == "Service Desk" || item.Name == "Service Desk") {
-				SendMessageToChannel(msg + "\nTicket ID: " + jiraRequest.Issue.ID + "\nTicket Key:" + jiraRequest.Issue.Key + "\nPriority: " + jiraRequest.Issue.Fields.Priority.Name + "\nSLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n\n\n")
+				SendMessageToChannel(
+					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
+					jiraRequest.Issue.Key,
+					msg+"\nTicket ID: "+jiraRequest.Issue.ID+"\nTicket Key:"+jiraRequest.Issue.Key+"\nPriority: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n")
 			}
 
 			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
