@@ -58,21 +58,20 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 	go validateIssueDispatcher(jiraRequest, projectID, topicDispatcher, payload)
 
-	go PublicMessage(projectID, topicMetrics, payload)
+	//go PublicMessage(projectID, topicMetrics, payload)
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
-	msg := "Começou um novo ciclo de SLA!"
+	msg := "Começou um novo ciclo de SLA!\n\n"
 
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10366" {
-
 			if jiraRequest.EventName == "jira:issue_updated" && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" && (item.Value == "Service Desk" || item.Name == "Service Desk") {
 				SendMessageToChannel(
 					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
 					jiraRequest.Issue.Key,
-					msg+"\nTicket ID: "+jiraRequest.Issue.ID+"\nTicket Key:"+jiraRequest.Issue.Key+"\nPriority: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n")
+					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n")
 			}
 
 			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
