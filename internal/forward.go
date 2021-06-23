@@ -62,7 +62,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
-	msg := "Começou um novo ciclo de SLA!\n\n"
+	msg := "Começou um novo ciclo de SLA!\n"
 
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
