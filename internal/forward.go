@@ -63,13 +63,14 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
 	if jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
-		SendMessageToChannel(
-			"===============================================================================================================\n" +
-				"Ticket ID: " + jiraRequest.Issue.ID + "\n " +
-				"Ticket Key:" + jiraRequest.Issue.Key + "\n " +
-				"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
-				"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n" +
-				"===============================================================================================================")
+		/*SendMessageToChannel(
+		"===============================================================================================================\n" +
+			"Ticket ID: " + jiraRequest.Issue.ID + "\n " +
+			"Ticket Key:" + jiraRequest.Issue.Key + "\n " +
+			"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
+			"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n" +
+			"===============================================================================================================")*/
+		SendMessageToChannel("Ticket ID: " + jiraRequest.Issue.ID)
 	}
 
 	b, _ := json.Marshal(jiraRequest)
