@@ -62,6 +62,8 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
+	log.Println("Status: " + jiraRequest.Issue.Fields.Status.Name)
+
 	if jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
 		/*SendMessageToChannel(
 		"===============================================================================================================\n" +
@@ -73,13 +75,9 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 		SendMessageToChannel("Ticket ID: " + jiraRequest.Issue.ID)
 	}
 
-	b, _ := json.Marshal(jiraRequest)
-
-	log.Println(string(b))
-
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
-		if item.CustomID == "customfield_10646" {
+		if item.CustomID == "customfield_10366" {
 			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
 				PublicMessage(projectID, topicName, payload)
 			}
