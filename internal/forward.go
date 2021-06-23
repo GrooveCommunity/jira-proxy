@@ -62,17 +62,24 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
+	if jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
+		SendMessageToChannel(
+			"===============================================================================================================\n" +
+				"Ticket ID: " + jiraRequest.Issue.ID + "\n " +
+				"Ticket Key:" + jiraRequest.Issue.Key + "\n " +
+				"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
+				"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n" +
+				"===============================================================================================================")
+	}
+
+	b, _ := json.Marshal(jiraRequest)
+
+	log.Println(string(b))
+
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10646" {
 			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
-				SendMessageToChannel(
-					"===============================================================================================================\n" +
-						"Ticket ID: " + jiraRequest.Issue.ID + "\n " +
-						"Ticket Key:" + jiraRequest.Issue.Key + "\n " +
-						"Priority: " + jiraRequest.Issue.Fields.Priority.Name + "\n\n" +
-						"SLA: " + getSLA(jiraRequest.Issue.Fields.Priority.Name) + "\n" +
-						"===============================================================================================================\n\n")
 				PublicMessage(projectID, topicName, payload)
 			}
 
