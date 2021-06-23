@@ -58,7 +58,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 	go validateIssueDispatcher(jiraRequest, projectID, topicDispatcher, payload)
 
-	//go PublicMessage(projectID, topicMetrics, payload)
+	go PublicMessage(projectID, topicMetrics, payload)
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
