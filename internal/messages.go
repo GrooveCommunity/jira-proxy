@@ -13,9 +13,6 @@ func SendMessageToChannel(url, issueKey, message string) {
 	token := os.Getenv("TOKEN_DISPATCHER_PAYGO_DISCORD")
 	channelID := os.Getenv("CHANNEL_ID_DISCORD")
 
-	log.Println(token)
-	log.Println(channelID)
-
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
 		log.Println("erro ao abrir conexão com o servidor")
