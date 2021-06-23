@@ -44,6 +44,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 		Summary:      jiraRequest.Issue.Fields.Summary,
 		Description:  jiraRequest.Issue.Fields.Description,
 		Project:      jiraRequest.Issue.Fields.Project.Name,
+		Attachment:   jiraRequest.Issue.Fields.Attachment,
 	}
 
 	payload, errPayLoad := json.Marshal(jiraIssue)
