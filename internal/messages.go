@@ -26,7 +26,7 @@ func SendMessageToChannel(url, issueKey, message string) {
 		Title:       issueKey,
 		URL:         url,
 		Description: message,
-		Timestamp:   time.Now().Format(time.RFC822),
+		Timestamp:   time.Now().Format(time.RFC3339),
 		Color:       5793266,
 	}
 
