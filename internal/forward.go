@@ -120,7 +120,7 @@ func getSLA(priority string) string {
 		return "00:15:00"
 	} else if priority == "Alta" {
 		return "02:00:00"
-	} else if priority == "Média" {
+	} else if priority == "Media" {
 		return "08:00:00"
 	} else if priority == "Baixa" {
 		return "48:00:00"
