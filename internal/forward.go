@@ -112,7 +112,7 @@ func UnmarchallMapCustomField(dataMap map[string]interface{}) []entity.CustomFie
 }
 
 func getSLA(priority string) string {
-	if priority == "Altíssima" {
+	if priority == "Altissima" {
 		return "00:15:00"
 	} else if priority == "Alta" {
 		return "02:00:00"
