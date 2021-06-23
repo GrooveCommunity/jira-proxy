@@ -31,6 +31,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 		Event:        jiraEvent,
 		CustomFields: jiraRequest.Issue.Fields.CustomFields,
 		Transitions:  jiraTransitions,
+		IssueID:      jiraRequest.Issue.ID,
 		Key:          jiraRequest.Issue.Key,
 		Assignee:     jiraRequest.Issue.Fields.Assignee.User,
 		Creator:      jiraRequest.Issue.Fields.Creator.Name,
