@@ -46,7 +46,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(body, &jiraRequest)
 	json.Unmarshal(body, &request)
 
-	log.Println(body)
+	log.Println(string(body))
 
 	customFields := internal.UnmarchallMapCustomField(request.(map[string]interface{}))
 
