@@ -15,6 +15,10 @@ type customFields map[string]interface{}
 
 func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicDispatcher, topicMetrics string) {
 
+	if jiraRequest.User.Name == "Automation for Jira" {
+		return
+	}
+
 	jiraEvent := entity.JiraEvent{
 		EventUser: jiraRequest.User.Name,
 		DateTime:  time.Now().Format(time.RFC3339),
@@ -70,14 +74,11 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10366" {
 			if jiraRequest.EventName == "jira:issue_updated" && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" && (item.Value == "Service Desk" || item.Name == "Service Desk") {
+				PublicMessage(projectID, topicName, payload)
 				SendMessageToChannel(
 					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
 					jiraRequest.Issue.Key,
 					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n")
-			}
-
-			if (item.Value == "Service Desk" || item.Name == "Service Desk") && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" {
-				PublicMessage(projectID, topicName, payload)
 			}
 
 			break
