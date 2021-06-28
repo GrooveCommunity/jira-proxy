@@ -8,10 +8,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/GrooveCommunity/glib-cloud-storage/gcp"
 	"github.com/GrooveCommunity/glib-noc-event-structs/entity"
 )
 
 type customFields map[string]interface{}
+
+var nocUsers entity.NocUsers
 
 func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicDispatcher, topicMetrics string) {
 
@@ -73,7 +76,8 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 	for _, item := range jiraRequest.Issue.Fields.CustomFields {
 		//customfield_10646 é o campo Squads
 		if item.CustomID == "customfield_10366" {
-			if jiraRequest.EventName == "jira:issue_updated" && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" && (item.Value == "Service Desk" || item.Name == "Service Desk") {
+
+			if validateForward(jiraRequest, item.Name, item.Value) {
 				PublicMessage(projectID, topicName, payload)
 				SendMessageToChannel(
 					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
@@ -84,6 +88,16 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 			break
 		}
 	}
+}
+
+func validateSLAUser(user string) bool {
+	for _, nocUser := range nocUsers.JiraUsers {
+		if nocUser.Name == user {
+			return true
+		}
+	}
+
+	return false
 }
 
 func UnmarchallMapCustomField(dataMap map[string]interface{}) []entity.CustomField {
@@ -126,4 +140,20 @@ func getSLA(priority string) string {
 	}
 
 	return ""
+}
+
+func validateForward(jiraRequest entity.JiraRequest, customFieldName, customFieldValue string) bool {
+	if jiraRequest.EventName == "jira:issue_updated" && jiraRequest.Issue.Fields.Status.Name == "Aguardando SD" && (customFieldName == "Service Desk" || customFieldValue == "Service Desk") {
+		if jiraRequest.Issue.Fields.Assignee.User == "" || validateSLAUser(jiraRequest.Issue.Fields.Assignee.User) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func GetNocUsers() {
+	dataUsers := gcp.GetObject("noc-paygo", "jira-users.json")
+
+	json.Unmarshal(dataUsers, &nocUsers)
 }

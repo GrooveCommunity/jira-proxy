@@ -29,6 +29,8 @@ func main() {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
 	}
 
+	internal.GetNocUsers()
+
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("APP_PORT"), router))
 }
 
