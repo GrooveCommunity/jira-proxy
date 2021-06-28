@@ -25,9 +25,9 @@ func main() {
 	topicDispatcher = os.Getenv("TOPIC_ID_DISPATCHER")
 	topicMetrics = os.Getenv("TOPIC_ID_METRICS")
 
-	if projectID == "" || topicDispatcher == "" || topicMetrics == "" || os.Getenv("TOKEN_DISPATCHER_PAYGO_DISCORD") == "" || os.Getenv("CHANNEL_ID_DISCORD") == "" {
+	/*if projectID == "" || topicDispatcher == "" || topicMetrics == "" || os.Getenv("TOKEN_DISPATCHER_PAYGO_DISCORD") == "" || os.Getenv("CHANNEL_ID_DISCORD") == "" {
 		log.Fatal("Nem todas as variáveis de ambiente requeridas foram fornecidas. ")
-	}
+	}*/
 
 	internal.GetNocUsers()
 
@@ -49,6 +49,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(body, &request)
 
 	log.Println(string(body))
+	log.Println("=========================================\n\n\n")
 
 	customFields := internal.UnmarchallMapCustomField(request.(map[string]interface{}))
 
