@@ -14,11 +14,13 @@ import (
 
 type customFields map[string]interface{}
 
+const YELLOW = 16705372
+
 var nocUsers entity.NocUsers
 
 func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicDispatcher, topicMetrics string) {
 
-	if jiraRequest.User.Name == "Automation for Jira" {
+	if jiraRequest.User.Name == "Automation for Jira" || jiraRequest.User.Name == "ScriptRunner for Jira" {
 		return
 	}
 
@@ -82,7 +84,8 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 				SendMessageToChannel(
 					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
 					jiraRequest.Issue.Key,
-					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n")
+					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n",
+					YELLOW)
 			}
 
 			break

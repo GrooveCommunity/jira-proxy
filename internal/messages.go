@@ -9,7 +9,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func SendMessageToChannel(url, issueKey, message string) {
+func SendMessageToChannel(url, issueKey, message string, color int) {
 	token := os.Getenv("TOKEN_DISPATCHER_PAYGO_DISCORD")
 	channelID := os.Getenv("CHANNEL_ID_DISCORD")
 
@@ -27,7 +27,7 @@ func SendMessageToChannel(url, issueKey, message string) {
 		URL:         url,
 		Description: message,
 		Timestamp:   time.Now().Format(time.RFC3339),
-		Color:       5793266,
+		Color:       color,
 	}
 
 	_, errMsg := dg.ChannelMessageSendEmbed(channelID, &msg)
