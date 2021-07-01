@@ -19,11 +19,6 @@ const YELLOW = 16705372
 var nocUsers entity.NocUsers
 
 func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicDispatcher, topicMetrics string) {
-
-	if jiraRequest.User.Name == "Automation for Jira" || jiraRequest.User.Name == "ScriptRunner for Jira" {
-		return
-	}
-
 	jiraEvent := entity.JiraEvent{
 		EventUser: jiraRequest.User.Name,
 		DateTime:  time.Now().Format(time.RFC3339),
@@ -159,4 +154,20 @@ func GetNocUsers() {
 	dataUsers := gcp.GetObject("noc-paygo", "jira-users.json")
 
 	json.Unmarshal(dataUsers, &nocUsers)
+}
+
+func ValidateRequest(jiraRequest entity.JiraRequest) bool {
+	if jiraRequest.User.Name == "Automation for Jira" || jiraRequest.User.Name == "ScriptRunner for Jira" {
+		return false
+	}
+
+	if jiraRequest.EventName == "issue_property_set" {
+		return false
+	}
+
+	if jiraRequest.Issue.Key == "" {
+		return false
+	}
+
+	return true
 }

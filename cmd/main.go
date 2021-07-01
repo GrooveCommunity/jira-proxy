@@ -16,10 +16,6 @@ var (
 	projectID, topicDispatcher, topicMetrics string
 )
 
-type Result struct {
-	Teste string
-}
-
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/healthy", handleValidateHealthy).Methods("GET")
@@ -59,5 +55,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 	jiraRequest.Issue.Fields.CustomFields = customFields
 
-	go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, topicMetrics)
+	if internal.ValidateRequest(jiraRequest) {
+		go internal.ForwardIssue(jiraRequest, body, projectID, topicDispatcher, topicMetrics)
+	}
 }
