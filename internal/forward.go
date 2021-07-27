@@ -64,7 +64,7 @@ func ForwardIssue(jiraRequest entity.JiraRequest, body []byte, projectID, topicD
 
 	go validateIssueDispatcher(jiraRequest, projectID, topicDispatcher, payload)
 
-	go PublicMessage(projectID, topicMetrics, payload)
+	go gcp.PublicMessage(projectID, topicMetrics, payload)
 }
 
 func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicName string, payload []byte) {
@@ -75,11 +75,11 @@ func validateIssueDispatcher(jiraRequest entity.JiraRequest, projectID, topicNam
 		if item.CustomID == "customfield_10366" {
 
 			if validateForward(jiraRequest, item.Name, item.Value) {
-				PublicMessage(projectID, topicName, payload)
+				gcp.PublicMessage(projectID, topicName, payload)
 				SendMessageToChannel(
 					"https://paygo.atlassian.net/browse/"+jiraRequest.Issue.Key,
 					jiraRequest.Issue.Key,
-					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n\n\n",
+					msg+"\nPrioridade: "+jiraRequest.Issue.Fields.Priority.Name+"\nSLA: "+getSLA(jiraRequest.Issue.Fields.Priority.Name)+"\n + Status: "+jiraRequest.Issue.Fields.Status.Name+"\n\n",
 					YELLOW)
 			}
 
